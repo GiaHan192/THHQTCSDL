@@ -1,0 +1,171 @@
+--CÂU 1
+CREATE DATABASE QuanLyDuAn2
+GO
+USE QuanLyDuAn2
+GO
+CREATE TABLE DEAN
+(
+MADA nvarchar(2) not null,
+TENDA NVARCHAR(50),
+DDIEM_DA NVARCHAR(20)
+CONSTRAINT PK_DEAN PRIMARY KEY(MADA)
+)
+GO
+CREATE TABLE PHONGBAN
+(
+MAPHG nvarchar(2)not null ,
+TENPHG NVARCHAR(20) 
+CONSTRAINT PK_PHONGBAN PRIMARY KEY(MAPHG)
+)
+GO
+CREATE TABLE THANNHAN
+(
+MANV NVARCHAR(9) NOT NULL,
+TENTN NVARCHAR(20) NOT NULL,
+NGAYSINH SMALLDATETIME,
+PHAI NVARCHAR(3),
+QUANHE NVARCHAR(15)
+CONSTRAINT PK_THANNHAN PRIMARY KEY(MANV, TENTN)
+)
+GO
+CREATE TABLE PHANCONG
+(
+MANV NVARCHAR(9) NOT NULL,
+MADA nvarchar(2) NOT NULL,
+THOIGIAN numeric (18,0)
+CONSTRAINT PK_PHANCONG PRIMARY KEY(MANV, MADA)
+)
+GO
+CREATE TABLE NHANVIEN
+(
+MANV NVARCHAR(9) NOT NULL,
+HONV NVARCHAR(15),
+TENLOT NVARCHAR(30),
+TENNV NVARCHAR(30),
+NGSINH SMALLDATETIME,
+DIACHI NVARCHAR(150),
+PHAI NVARCHAR(3),
+LUONG NUMERIC(18,0),
+PHONG NVARCHAR(2)
+CONSTRAINT PK_NHANVIEN PRIMARY KEY(MANV)
+)
+--CÂU 2
+--TẠO KHÓA NGOẠI 
+ALTER TABLE PHANCONG 
+ADD CONSTRAINT FK_PHANCONG 
+FOREIGN KEY(MANV) 
+REFERENCES NHANVIEN(MANV) 
+GO 
+ALTER TABLE THANNHAN 
+ADD CONSTRAINT FK_THANNHAN 
+FOREIGN KEY(MANV) 
+REFERENCES NHANVIEN(MANV) 
+GO 
+ALTER TABLE NHANVIEN 
+ADD CONSTRAINT FK_NHANVIEN 
+FOREIGN KEY(PHONG) 
+REFERENCES PHONGBAN(MAPHG) 
+GO 
+ALTER TABLE PHANCONG
+ADD CONSTRAINT FK_DEAN_PHANCONG
+FOREIGN KEY(MADA) 
+REFERENCES DEAN(MADA) 
+GO
+--CÂU 4
+-- Trong bảng PHONGBAN, chỉnh sửa kiểu dữ liệu của cột TenPhg thành nvarchar(30)
+ALTER TABLE PHONGBAN ALTER column TENPHG nvarchar(30)
+-- Trong bảng DEAN, chỉnh sửa kiểu dữ liệu của cột DDiemDA thành nvarchar(20)
+ALTER TABLE DEAN ALTER column DDIEM_DA NVARCHAR(20)
+-- Trong bảng THANNHAN, chỉnh sửa kiểu dữ liệu của cột TenTN thành nvarchar(20), kiểu dữ liệu của cột Phai thành nvarchar(3), kiểu dữ liệu của cột QuanHe thành nvarchar(15)
+ALTER TABLE THANNHAN ALTER column TENTN NVARCHAR(20)
+ALTER TABLE THANNHAN ALTER column PHAI NVARCHAR(3)
+ALTER TABLE THANNHAN ALTER column QUANHE NVARCHAR(15)
+-- Trong bảng NHANVIEN, thêm cột SoDienThoai với kiểu dữ liệu varchar(15)
+ALTER TABLE NHANVIEN ADD SODIENTHOAI VARCHAR(15)
+-- Trong bảng NHANVIEN, xóa cột SoDienThoai vừa tạo.
+ALTER TABLE NHANVIEN DROP COLUMN ALTER SODIENTHOAI
+--CÂU 5
+--***Nhập dữ liệu
+--Bảng nhân viên:
+INSERT INTO NHANVIEN
+VALUES(N'123',N'Đinh', N'Bá', N'Tiên','27/02/1982', N'Mộ Đức',N'Nam', 'NULL', N'4')
+INSERT INTO NHANVIEN
+VALUES(N'234',N'Nguyễn', N'Thanh', N'Tùng', '12/08/1956', N'Sơn Tịnh', N'Nam', NULL,N'5')
+INSERT INTO NHANVIEN
+VALUES(N'345',N'Bùi', N'Thúy', N'Vũ',NULL, N'Tư Nghĩa',N'Nữ', NULL, N'4')
+INSERT INTO NHANVIEN
+VALUES(N'456',N'Lê', N'Thị', N'Nhàn','12/07/1962', N'Mộ Đức',N'Nữ', NULL, N'4')
+INSERT INTO NHANVIEN
+VALUES(N'567',N'Nguyễn', N'Mạnh', N'Hùng','25/03/1985', N'Sơn Tịnh',N'Nam', NULL, N'5')
+INSERT INTO NHANVIEN
+values (N'678', N'Trần', N'Hồng', N'Quang', null, 'bình Sơn', 'Nam', null, '5')
+insert into NHANVIEN
+values (N'789', N'Trần', N'Thanh', N'Tâm', '1972-6-17', 'Quãng Ngãi', 'Nam' ,null, '5')
+insert into NHANVIEN
+values (N'890', N'Cao', N'Thanh', N'Huyền', null, 'Tư Nghĩa', N'Nữ', null, '1')
+insert into NHANVIEN
+values (N'901', N'Vương', N'Ngọc', N'Quyền', '1987-12-12', 'Mộ Đức', N'Nam', null, '1')
+
+--thân nhân:
+insert into THANNHAN
+values ('123', N'Châu', '2005-10-30', N'Nữ', N'Con gái')
+insert into THANNHAN
+values ('123', N'Duy', '2001-10-25', N'Nam', N'Con trai')
+insert into THANNHAN
+values ('123', N'Phương', '1985-10-30', N'Nữ', N'Vợ chồng')
+insert into THANNHAN
+values ('234', N'Thanh', '1980-04-05', N'Nữ', N'Con gái')
+insert into THANNHAN
+values ('345', N'Dương', '1956-10-30', N'Nam', N'Vợ chồng')
+insert into THANNHAN
+values ('345', N'Khang', '1982-10-25', N'Nam', N'Con trai')
+insert into THANNHAN
+values ('456', N'Hùng', '1987-01-01', N'Nam', N'Con trai')
+insert into THANNHAN
+values ('901', N'Thương', '1984-04-05', N'Nữ', N'Vợ chồng')
+
+--Đê án:
+insert into DEAN
+values ('1', N'Nâng cao chất lượng muối', N'Sa Huỳnh')
+insert into DEAN
+values ('10', N'Xây dựng nhà máy chế biến thủy sản', N'Dung Quất')
+insert into DEAN
+values ('2', N'Phát triẻn hạ tầng mạng', N'Quảng Ngãi')
+insert into DEAN
+values ('20', N'Truyền tải cáp quang', N'Quảng Ngãi')
+insert into DEAN
+values ('3', N'Tin học hóa trường học', N'Ba Tơ')
+insert into DEAN
+values ('30', N'Đào tạo nhân lực', N'Tịnh Phong')
+
+--Phân công:
+insert into PHANCONG
+values ('123', '1', '30')
+insert into PHANCONG
+values ('123', '2', '8')
+insert into PHANCONG
+values ('345', '10', '10')
+insert into PHANCONG
+values ('345', '20', '10')
+insert into PHANCONG
+values ('345', '3', '10')
+insert into PHANCONG
+values ('456', '1', '20')
+insert into PHANCONG
+values ('456', '2', '20')
+insert into PHANCONG
+values ('678', '3', '40')
+insert into PHANCONG
+values ('789', '10', '35')
+insert into PHANCONG
+values ('789', '20', '30')
+insert into PHANCONG
+values ('789', '30', '5')
+
+--Phòng ban
+insert into PHONGBAN
+values ('1', N'Quản lý')
+insert into PHONGBAN
+values ('4', N'Điều hành')
+insert into PHONGBAN
+values ('5', N'Nghiên cứu')
