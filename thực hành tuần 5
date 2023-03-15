@@ -1,0 +1,37 @@
+--1 CREATE PROCEDURE spTangLuong
+AS
+BEGIN
+    UPDATE NHANVIEN SET Luong = Luong * 1.1
+END
+
+CREATE PROCEDURE spTangLuong
+AS
+BEGIN
+    UPDATE NHANVIEN SET Luong = Luong * 1.1
+END
+
+--2
+
+ALTER TABLE NHANVIEN ADD NgayNghiHuu DATE;
+CREATE PROCEDURE spNghiHuu
+AS
+BEGIN
+    UPDATE NHANVIEN 
+    SET NgayNghiHuu = DATEADD(day, 100, GETDATE())
+    WHERE GioiTinh = 'Nam' AND DATEDIFF(year, NgaySinh, GETDATE()) >= 60 OR GioiTinh = 'Nữ' AND DATEDIFF(year, NgaySinh, GETDATE()) >= 55
+END
+--3
+CREATE PROCEDURE spXemDeAn
+    @DiaDiem VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM DEAN WHERE DiaDiem = @DiaDiem
+END
+--4
+CREATE PROCEDURE spCapNhatDeAn
+    @DiaDiemCu VARCHAR(50),
+    @DiaDiemMoi VARCHAR(50)
+AS
+BEGIN
+    UPDATE DEAN SET DiaDiem = @DiaDiemMoi WHERE DiaDiem = @DiaDiemCu
+END
